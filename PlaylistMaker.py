@@ -1,9 +1,7 @@
-import pathlib, glob, regex as re
+import pathlib, regex as re
 from mutagen import File
 
 def get_duration(lis:list)->dict:
-    # print(lis)
-    # exit()
     info_dict={}
     for item in lis:
         audio=File(str(item[0]))
@@ -13,12 +11,10 @@ def get_duration(lis:list)->dict:
 print(f"{"PlaylistMaker by KalerKaler":*^40}")
 
 music_paths = list(pathlib.Path('.').rglob("*.mp3"))
-# print(music_paths)
 english_list=[]
 jp=[]
 
 for item in music_paths:
-    # print(item, item.name, item)
     
     english=r"^[\u0000-\u007F]+$"
     english_jp = r'^[\u0000-\u007F\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF\uFF00-\uFFEF]+$'
@@ -28,9 +24,6 @@ for item in music_paths:
     
     elif re.match(english_jp,item.stem):
         jp.append([item.absolute(),item.stem])
-
-# print(english_list)
-# print(english_list,"\n",jp)
 
 print(f"Found {len(english_list)} English songs.")
 print(f"Found {len(jp)} Japanese songs.")
@@ -47,8 +40,6 @@ japanese_duration_dict=get_duration(jp)
 japanese_playlist_name=input("Enter the name for the Japanese playlist file\n")
 with open(japanese_playlist_name+".m3u","w",encoding="UTF-8") as jp:
     jp.write("#EXTM3U\n")
-    # print(japanese_duration_dict)
-    # exit()
     for item in japanese_duration_dict:
         jp.write(f"#EXTINF:{japanese_duration_dict[item][0]}, {japanese_duration_dict[item][1]}\n")
         jp.write(f"{item}\n")
